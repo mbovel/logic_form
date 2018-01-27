@@ -1,0 +1,202 @@
+\documentclass[8pt]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lipsum}
+\usepackage{multicol}
+\usepackage[french]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage[inline]{enumitem}
+\usepackage{xfrac}
+\usepackage{hyperref}
+
+\theoremstyle{definition}
+\newtheorem{innerthm}{Théorème}
+\newenvironment{thm}[1]
+  {\renewcommand\theinnerthm{#1}\innerthm}
+  {\endinnerthm}
+\newtheorem{innerdefn}{Définition}
+\newenvironment{defn}[1]
+  {\renewcommand\theinnerdefn{#1}\innerdefn}
+  {\endinnerdefn}
+\newtheorem{innernotation}{Notation}
+\newenvironment{notation}[1]
+  {\renewcommand\theinnernotation{#1}\innernotation}
+  {\endinnernotation}
+\newtheorem{innerremark}{Remarque}
+\newenvironment{remark}[1]
+  {\renewcommand\theinnerremark{#1}\innerremark}
+  {\endinnerremark}
+\newtheorem{innerexample}{Exemple}
+\newenvironment{ex}[1]
+  {\renewcommand\theinnerexample{#1}\innerexample}
+  {\endinnerexample}
+  
+\newcommand{\powerset}[1]{\mathcal{P}({#1})}
+\newcommand{\terms}{t_1, \dots, t_n}
+\DeclareMathOperator{\he}{ht}
+\DeclareMathOperator{\fini}{fini}
+\DeclareMathOperator{\sat}{sat}
+
+\title{Formulaire de Logique}
+\author{Matthieu Bovel (\href{mailto:matthieu.bovel@epfl.ch}{matthieu.bovel@epfl.ch})}
+\date{Janvier 2018}
+
+\begin{document}
+\begin{multicols}{3}
+\noindent Formulaire pour l'examen du cours «logique mathématique» de Jacques Duparc, rédigé par Matthieu Bovel (\href{mailto:matthieu.bovel@epfl.ch}{matthieu.bovel@epfl.ch}) en janvier 2018.
+
+\stepcounter{section}
+\section{Rappels}
+
+\begin{defn}{2.2.a}[Fonction partielle] Une relation binaire $f$ de $A$ dans $B$ est une fonction ssi tout élément de $A$ a au plus une image par $f$: $\forall x, y, y' \; (x,y) \in f \land (x,y') \in f \implies y = y'$.\end{defn}
+
+\begin{defn}{2.2.b}[Application ou fonction (totale)] Une fonction partielle $f$ est une application ou fonction (totale) ssi tout élément de $A$ a au moins une image par $f$: $\forall x \in A \, \exists y \; f(x) = y$.\end{defn}
+
+\begin{defn}{2.4.a}[Injection] Une application $f$ est une injection ssi tout élément de $B$ a au plus un antécédent par $f$: $\forall x, x' \in A \; f(x) = f(x') \implies x = x'$.\end{defn}
+
+\begin{defn}{2.4.b}[Surjection] Une application $f$ est une surjection ssi tout élément de $B$ a au moins un antécédent par $f$: $\forall y \in B \, \exists $x$ \; f(x) = y$.\end{defn}
+
+\begin{defn}{2.4.c}[Bijection] Une application $f$ est une bijection ssi $f$ est une injection et une surjection.\end{defn}
+
+\begin{defn}{2.5.a}[Infini] Un ensemble $A$ est infini ssi il existe une injection $\mathbb{N} \to A$, ou ssi il existe une injection $A \to B \subset A$.\end{defn}
+
+\begin{defn}{2.5.b}[Dénombrable] Un ensemble $A$ est dénombrable ssi il existe une injection $A \to \mathbb{N}$.\end{defn}
+
+\begin{defn}{2.5.c}[Non dénombrable] Un ensemble $A$ est non dénombrable ssi il est infini mais pas dénombrable.\end{defn}
+
+\begin{defn}{sup.}[Fini] Un ensemble $A$ est fini, noté $\fini(A)$ dans ce résumé, ssi il existe une bijection $A \to \{1, \dots, n\}$, pour un $n \in \mathbb{N}$.\end{defn}
+
+\begin{defn}{2.6}[Équipotent] Deux ensembles $A$ et $B$ sont équipotents ssi il existe une bijection $A \to B$.\end{defn}
+
+\begin{notation}{2.7} On note $A \approx B$ le fait que $A$ et $B$ sont équipotents, $A \lesssim B$ le fait qu'il existe une injection $A \to B$ et $A \lnsim B$ pour $A \lesssim B$ mais $A \not\lesssim B$ (il existe une injection mais pas de bijection).\end{notation}
+
+\begin{thm}{2.8}[Cantor] Soit $A$ un ensemble. Il n'existe pas de surjection $A \to \powerset{A}.$\end{thm}
+\begin{proof} Supposons qu'il existe $f: A \to \powerset{A}$ surjective. Soit $B = \{ a \in A : a \notin f(a)\}.$ Comme $f$ est surjective et que $B \in \powerset{A}$, il existe $f(b) = B$ pour un $b \in A$. Si $b \in B$, alors $b \notin f(b) = B$. Si $b \notin B = f(b)$, alors $b \in B$. Contradiction.\end{proof}
+
+\begin{thm}{2.9}[Cantor-Schröder-Bernstein] Soit $A$ et $B$ deux ensembles. Si il existe deux injections $A \to B$ et $B \to A$, alors $A \approx B$.\end{thm}
+
+\section{Syntaxe}
+
+\begin{defn}{3.4}[Langage] Un langage de calcul des prédicats du premier ordre est composé
+\begin{enumerate*}
+    \item d'un ensemble dénombrable de variables $\mathcal{V} = \{ v_0, v_1, \dots \}$,
+    \item des connecteurs logiques $\{\lnot, \land, \lor, \Longrightarrow, \Longleftrightarrow \}$,
+    \item des quantificateurs $\{ \forall, \exists \}$,
+    \item de parenthèses,
+    \item d'un ensemble de constantes $\{ c_0, c_1, \dots \}$,
+    \item d'un ensemble de constantes $\{ c_0, c_1, \dots \}$,
+    \item d'un ensemble de fonctions d'arités finies noté $\{ f_0^{(n_0)}, f_1^{(n_1)}, \dots \}$ avec $n_i$ l'arité de $f_i$,
+    \item d'un ensembles de relations d'arités finies noté $\{ R_0^{(m_0)}, R_1^{(m_1)}, \dots \}$ avec $m_i$ l'arité de la relation $R_i$.
+\end{enumerate*}
+Les ensembles de constantes, fonctions et relations peuvent être indénombrables.
+\end{defn}
+
+\begin{defn}{3.6}[Terme] Un terme est une variable, une constante ou n'importe quelle expression $f(\terms)$ où $f$ est une fonction d'arité $n$ et $\terms$ des termes. On note $\mathscr{T}(\mathscr{L})$ l'ensemble des termes du langage $\mathscr{L}$.\end{defn}
+
+\begin{defn}{3.8}[Hauteur d'un terme] Pour un terme $t$, $\he(t) = 0$ si $t$ est une variable ou une constante, ou $1 + \max\{\he(t_i) : 1 \leq i \leq n \}$ si $t$ est une fonction $f(t_1, \cdots, t_n)$.\end{defn}
+
+\begin{defn}{3.10}[Formule atomique] Une formule atomique est une expression de la forme $R(\terms)$ où $R$ est une relation d'arité $n$ et $\terms$ des termes. On note $\mathscr{A}(\mathscr{L})$ l'ensemble des formules closes du langage $\mathscr{L}$.\end{defn}
+
+\begin{defn}{3.12}[Formule] Une formule est une formule atomique ou une expression de la forme $\lnot \varphi$, $(\varphi \lor \psi)$, $(\varphi \land \psi)$, $(\varphi \implies \psi)$, $(\varphi \iff \psi)$, $\forall \; x \varphi$ ou $\exists x \; \varphi$ avec $\varphi$, $\psi$ des formules et $x$ une variable.\end{defn}
+
+\begin{defn}{3.17-18}[Occurrence liée, libre] Une occurrence de variable est liée ssi elle est quantifiée (universellement ou existentiellement). Sinon, elle est libre.\end{defn}
+
+\begin{defn}{3.19}[Variable libre, liée] Une variable est libre ssi elle possède au moins une occurrence libre. Sinon, elle est liée.\end{defn}
+
+\begin{defn}{3.20}[Formule close] Une formule est close ssi elle ne possède aucune variable libre.\end{defn}
+
+\begin{defn}{3.21}[Clôture universelle] La clôture universelle d'une formule $\phi$ dont les variables libres sont $x_1, \dots, x_n$ est $\forall x_1 \dots \forall x_n \; \phi$.\end{defn}
+
+\section{Sémantique}
+
+\begin{defn}{4.1}[$\mathscr{L}$-structure ou $\mathscr{L}$-réalisation] La $\mathscr{L}$-structure ou $\mathscr{L}$-réalisation $\mathscr{M}$ d'un langage $\mathscr{L} = \{ c_i, {f_j}^{(n_j)}, {R_k}^{(n_k)}\}$ est composée
+\begin{enumerate*}
+    \item d'un ensemble non vide $M = |\mathscr{M}|$  appelé son domaine de base,
+    \item d'un élément $c_i^\mathscr{M}$ de $M$ pour chaque $c_i$,
+    \item d'une fonction $({f_j}^{(n_j)})^\mathscr{M}: M^{n_j} \to M$ pour chaque ${f_j}^{(n_j)}$,
+    \item d'une relation $({R_k}^{(n_k)})^\mathscr{M} \subseteq M^{n_k}$ pour chaque ${R_k}^{(n_k)}$.
+\end{enumerate*}
+%$\mathscr{M} = \left< M, c_i^\mathscr{M}, \left(f_j^{(n_j)}\right)^\mathscr{M}, \left(R_k^{(n_k)}\right)^\mathscr{M} \right>$
+\end{defn}
+
+\begin{notation}{4.6}[Formule satisfaite] On note $\mathscr{M}, \sfrac{a_1}{x_1}, \dots, \sfrac{a_n}{x_n} \models \phi$ le fait que $\phi$ est satisfaite dans $\mathscr{M}$ lorsque les variables $x_1,\dots,x_n$ sont respectivement interprétées par $a_1, \dots, a_n$.\end{notation}
+
+\begin{defn}{4.7.a}[Formule universellement valide] Une formule close $\phi$ est universellement valide ssi pour toute $\mathscr{L}$-structure, on a  $\mathscr{M} \models \phi$.\end{defn}
+
+\begin{defn}{4.7.b}[Formule contradictoire ou inconsistante] Une formule close $\phi$ est contradictoire ou inconsistante ssi pour toute $\mathscr{L}$-structure, on a $\mathscr{M} \not\models \phi$.\end{defn}
+
+\begin{defn}{4.7.c}[Formules équivalentes] Deux formules closes $\phi$ et $\psi$ sont équivalentes, noté $\phi \equiv \psi$, ssi pour toute $\mathscr{L}$-structure, on a $\mathscr{M} \models (\phi \iff \psi)$.\end{defn}
+
+\begin{defn}{4.11.a}[Théorie] Une théorie de $\mathscr{L}$ est un ensemble de formules closes de $\mathscr{L}$.\end{defn}
+
+\begin{defn}{4.11.b}[Modèle] Une $\mathscr{L}$-structure $\mathscr{M}$ est un modèle d'une théorie $\mathscr{T}$ ssi $\forall \phi \in \mathscr{T} \; \mathscr{M} \models \phi$.\end{defn}
+
+\begin{defn}{4.11.c}[Théorie satisfaisable ou consistante, théorie inconsistante] Une théorie $\mathscr{T}$ est satisfaisable ou consistante, noté $\sat(\mathscr{T})$ dans ce résumé, ssi elle possède au moins un modèle. Sinon, elle est inconsistante.\end{defn}
+
+\begin{defn}{4.11.d}[Théorie finiment consistante] Une théorie $\mathscr{T}$ est finiment consistante ssi chacun de ses sous-ensembles finis est satisfaisable. Autrement dit, $\forall \mathscr{T}' \subseteq \mathscr{T} \; \fini(\mathscr{T}') \implies \sat(\mathscr{T}')$.\end{defn}
+
+\begin{defn}{4.11.e}[Formule universellement valide] Une formule est universellement valide ssi sa clôture universelle $\phi$ est satisfaite dans tout modèle. Autrement dit, ssi $\{\lnot \phi\}$ est une théorie inconsistante.\end{defn}
+
+\begin{defn}{4.12}[Théories équivalentes] Deux théories $\mathscr{T}$ et $\mathscr{T'}$ sont équivalentes, noté $\mathscr{T} \equiv \mathscr{T'}$, ssi elles possèdent les mêmes modèles.\end{defn}
+
+\begin{defn}{4.13}[Conséquence sémantique] Une $\mathscr{L}$-théorie a pour conséquence sémantique la formule $\phi$ de $\mathscr{L}$, noté $\mathscr{T} \models \phi$, ssi toute $\mathscr{L}$-structure satisfaisant $\mathscr{T}$ satisfait aussi $\phi$.\end{defn}
+
+\begin{remark}{4.14} \begin{enumerate*}
+    \item Si $\mathscr{T}$ est satisfaisable, toute théorie $\mathscr{T'} \subseteq \mathscr{T}$ est aussi satisfaisable car tout  modèle de $\mathscr{T}$ est aussi modèle de $\mathscr{T'}$,
+    \item $\mathscr{T} \models \phi$ ssi $\mathscr{T} \cup \{ \lnot \phi \}$ est inconsistante,
+    \item si $\mathscr{T'} \subseteq \mathscr{T}$ est inconsistante, alors $\mathscr{T}$ est inconsistante,
+    \item si $\mathscr{T'} \models \phi$ et $\mathscr{T'} \subseteq \mathscr{T}$, alors $\mathscr{T} \subseteq \mathscr{T}$,
+    \item $\mathscr{T}$ est inconsistante ssi pour toute formule $\phi$, $\mathscr{T} \models \phi$,
+    \item $\mathscr{T}$ est inconsistante ssi il existe une contradiction $\phi$ telle que $\mathscr{T} \models \phi$,
+    \item $\phi$ est universellement valide ssi $\varnothing \models \phi$,
+    \item $\phi$ est universellement valide ssi pour toute théorie $\mathscr{T}$, $\mathscr{T} \models \phi$,
+    \item en remplaçant dans $\mathscr{T}$ chaque formule par une formule équivalente, on obtient une théorie équivalente,
+    \item la théorie $\{ \phi_0, \dots,  \phi_k \}$ est inconsistante ssi la formule $( \lnot \phi_0 \lor \dots \lor \lnot \phi_k )$ est universellement valide,
+    \item deux théories $\{ \phi_0, \dots,  \phi_k \}$ et $\{ \psi_, \dots,  \psi_k \}$ sont équivalentes ssi $ (\phi_0 \land \dots \land \phi_k) \equiv (\psi_0 \land \dots \land \psi_k)$.
+\end{enumerate*}\end{remark}
+
+\section{Théorie des modèles}
+
+\begin{defn}{5.1}[Homomorphisme] Soit $\mathscr{M}$ et $\mathscr{N}$ deux $\mathscr{L}$-structures. Un homomorphisme de $\mathscr{M}$ dans $\mathscr{N}$ est une fonction $\varphi: |\mathscr{M}| \to |\mathscr{N}|$ qui vérifie
+\begin{enumerate*}
+    \item pour tout symbole de constante $c \in \mathscr{L}$, $\varphi(c^{\mathscr{M}}) = c^{\mathscr{N}}$,
+    \item pour tout symbole de fonction $f^{(n)} \in \mathscr{L}$ et pour tout $(a_1, \dots, a_n) \in |M|^n$, $\varphi(f^{\mathscr{M}}(a_1, \dots, a_n)) = f^{\mathscr{N}}(\varphi(a_1), \dots, \varphi(a_n))$,
+    \item pour tout symbole de relation $R^{(n)} \in \mathscr{L}$ et pour tout $(a_1, \dots, a_n) \in |M|^n$, si $(a_1, \dots, a_n) \in R^{\mathscr{M}}$, alors $(\varphi(a_1), \dots, \varphi(a_n)) \in R^{\mathscr{N}}$.
+\end{enumerate*}\end{defn}
+
+\begin{defn}{5.3}[Plongement] Un plongement est un homomorphisme injectif qui vérifie en plus: pour tout symbole de relation $R^{(n)} \in \mathscr{L}$ et pour tout $(a_1, \dots, a_n) \in |M|^n$, si $(\varphi(a_1), \dots, \varphi(a_n)) \in R^{\mathscr{N}}$, alors $(a_1, \dots, a_n) \in R^{\mathscr{M}}$ (sens inverse de 5.1.3).\end{defn}
+
+\begin{defn}{5.5.a}[Isomorphisme] Un isomorphisme est un plongement surjectif.\end{defn}
+
+\begin{defn}{5.5.b}[Endomorphisme] Un endomorphisme est un homomorphisme avec $\mathscr{M} = \mathscr{N}$.\end{defn}
+
+\begin{defn}{5.5.c}[Automorphisme] Un automorphisme est un isomorphisme avec $\mathscr{M} = \mathscr{N}$.\end{defn}
+
+\begin{defn}{5.7}[Sous-structure] Soit $\mathscr{M}$ et $\mathscr{N}$ deux $\mathscr{L}$-structures. $\mathscr{N}$ est une sous-structure de $\mathscr{M}$ ssi
+\begin{enumerate*}
+    \item $|\mathscr{N}| \subseteq |\mathscr{M}|$,
+    \item pour tout symbole de constante $c \in \mathscr{L}$, $c^{\mathscr{N}} = c^{\mathscr{M}}$,
+    \item pour tout symbole de fonction $f^{(n)} \in \mathscr{L}$, $f^{\mathscr{N}} = f^{\mathscr{M}} \cap |\mathscr{N}|^{n + 1}$,
+    \item pour tout symbole de relation $R^{(n)} \in \mathscr{L}$, $R^{\mathscr{N}}) = R^{\mathscr{M}} \cap |\mathscr{N}|^{n}$.
+\end{enumerate*}\end{defn}
+
+\begin{ex}{5.8} \begin{enumerate*}
+    \item $<\mathbb{Z}, 0, +>$ est une sous-structure de $<\mathbb{Q}, 0, +>$,
+    \item $<\mathbb{Q}, 0, 1, +, \cdot>$ est une sous-structure de $<\mathbb{R}, 0, 1, +, \cdot>$,
+    \item $<2 \mathbb{Z}, 0, +>$ est une sous-structure de $<\mathbb{Z}, 0, +>$.
+\end{enumerate*}\end{ex}
+
+\begin{ex}{5.8} \begin{enumerate*}
+    \item $<\mathbb{Z}, 0, +>$ est une sous-structure de $<\mathbb{Q}, 0, +>$,
+    \item $<\mathbb{Q}, 0, 1, +, \cdot>$ est une sous-structure de $<\mathbb{R}, 0, 1, +, \cdot>$,
+    \item $<2 \mathbb{Z}, 0, +>$ est une sous-structure de $<\mathbb{Z}, 0, +>$.
+\end{enumerate*}\end{ex}
+
+\lipsum
+
+\end{multicols}
+\end{document}
