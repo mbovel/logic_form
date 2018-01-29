@@ -38,7 +38,8 @@
 \newenvironment{remark}[1]
   {\renewcommand\theinnerremark{#1}\innerremark}
   {\endinnerremark}
-  
+\addto\captionsfrench{\renewcommand\proofname{Preuve}}
+
 \newcommand{\powerset}[1]{\mathcal{P}({#1})}
 \newcommand{\powersetfin}[1]{\mathcal{P_{\text{fin}}}({#1})}
 \newcommand{\terms}{t_1, \dots, t_n}
@@ -223,19 +224,31 @@
 
 %\begin{proof} [...] \end{proof}
 
+\begin{defn}{C.5}[Axiomatisablité] Soient $\mathscr{L}$ un langage égalitaire et $C$ une classe de $\mathscr{L}$-structures. La classe $C$ est dite axiomatisable (respectivement finiment axiomatisable) si il existe une théorie de $\mathscr{L}$ (respectivement une théorie finie) $\mathscr{T}_C$ telle que pour toute $\mathscr{L}$-structure $\mathscr{M}$, on ait $\mathscr{M} \in C \iff \mathscr{M} \models \mathscr{T}_C$.\end{defn}
+
+\begin{thm}{C.6} Soient $\mathscr{L}$ un langage égalitaire et $C$ une classe de $\mathscr{L}$-structures axiomatisée par la théorie $\mathscr{T}_C$. Alors $C$ est finiment axiomatisable ssi il existe $\mathscr{T} \subseteq \mathscr{T}_C$ tel que $\mathscr{T}$ axiomatise $C$.\end{thm}
+
+\begin{thm}{E.6.1.1} La classe $C$ des structures finies n'est pas axiomatisable dans le langage égalitaire ne contenant que le symbole d'égalité.\end{thm}
+
+\begin{proof}Suppose qu'une $\mathscr{L}$-théorie $T$ axiomatise $C$.
+
+Pour chaque $n \in \mathbb{N}, n \geq 1$, considérons la formule $\psi_n$ signifiant «il existe $n$ éléments distincts»: $\exists x_1 \cdots \exists x_n \left( \bigwedge_{1 \leq i, j \leq n, i \neq j} \lnot x_i = x_j \right)$.
+
+Soit la théorie $T' = T \cup \{\psi_n : n \geq 1\}$. Montrons que $T'$ est finiment satisfaisable.
+Soit $F \subseteq T'$ un sous-ensemble fini de $T'$. Notons $N = \max\{n \in \mathbb{N} : \psi_n \in F\}$. Pour la structure $\mathscr{N} = \{0, 1, \dots, N - 1\}$, nous avons d'une part $\mathscr{N} \models T$ car $\mathscr{N} \in C$, et d'autre part, $\mathscr{N} \models \{\psi_n : n \geq 1\}$. Par conséquent $\mathscr{N} \models F$ et $T'$ est finiment satisfaisable. Par le théorème de compacité $T'$ est satisfaisable.
+
+Toutefois, pour toute structure $\mathscr{M}$ finie, il existe $N \in \mathbb{N}$ tel que $\mathscr{M} \not\models \psi_n$ et donc aucune structure $C$ ne saurait être modèle de $T'$. Contradiction.
+\end{proof}
+
+\begin{thm}{E.6.1.2} Si une classe $C$ est finiment axiomatisable par une théorie $\mathscr{T}_C$, alors la classe complémentaire l'est aussi, par $\{ \lnot \bigwedge_{\varphi \in \mathscr{T}_C} \; \varphi \}$.\end{thm}
+
 \section{Théorème de compacité}
 
 \begin{thm}{6.13}[Théorème de compacité] Une théorie $\mathscr{T}$ est satisfaisable ssi elle est finiment satisfaisable: $\sat(\mathscr{T}) \iff \forall \mathscr{T}' \in \powersetfin{\mathscr{T}} \; \sat(\mathscr{T}')$.\end{thm}
 
 \begin{thm}{C.3}[Théorème de compacité bis] Équivalent à 6.13: $\mathscr{T} \models \phi \iff \exists \mathscr{T}' \in \powersetfin{\mathscr{T}} \; \mathscr{T'} \models \phi$.\end{thm}
 
-\begin{defn}{C.5}[Axiomatisablité] Soient $\mathscr{L}$ un langage égalitaire et $C$ une classe de $\mathscr{L}$-structures. La classe $C$ est dite axiomatisable (respectivement finiment axiomatisable) si il existe une théorie de $\mathscr{L}$ (respectivement une théorie finie) $\mathscr{T}_C$ telle que pour toute $\mathscr{L}$-structure $\mathscr{M}$, on ait $\mathscr{M} \in C \iff \mathscr{M} \models \mathscr{T}_C$.\end{defn}
-
-\begin{thm}{C.6} Soient $\mathscr{L}$ un langage égalitaire et $C$ une classe de $\mathscr{L}$-structures axiomatisée par la théorie $\mathscr{T}_C$. Alors $C$ est finiment axiomatisable ssi il existe $\mathscr{T} \subseteq \mathscr{T}_C$ tel que $\mathscr{T}$ axiomatise $C$.\end{thm}
-
-\begin{thm}{E.6.1.2} Si une classe $C$ est finiment axiomatisable par une théorie $\mathscr{T}_C$, alors la classe complémentaire l'est aussi, par $\{ \lnot \bigwedge_{\varphi \in \mathscr{T}_C} \; \varphi \}$.\end{thm}
-
-\section{Nombres ordinaux et cardinaux}
+\section{Ordres et ordinaux}
 
 \begin{defn}{7.1}[Ordre strict] Un ordre strict est un couple $\order{E}{<}$ avec $E$ un ensemble et $<$ une relation binaire transitive ($\forall x, y, z \in E \; (x < y \land y < z) \implies x < z$) et antiréflexive ($\forall x \in E \; \lnot(x < x)$).\end{defn}
 
@@ -265,6 +278,11 @@
 \begin{thm}{7.11} Pour $\order{A}{<_R}$ un bon ordre, $A$ non vide, on a $\forall x \in A \; \order{A}{<_R} \not\cong \order{{\Pred^A}_{<_R}(x)}{<_R}$.\end{thm}
 
 %\begin{proof} [...] \end{proof}
+
+\begin{thm}{E.7.1.2} Si $\order{E}{<}$ est un bon ordre, alors il n'existe pas de chaîne infinie descendante, i.e. une suite $(e_i)_{i \in \mathbb{N}}$ dans $E$ avec $e_0 > e_1 > \dots$.\end{thm}
+
+\begin{proof}L'ensemble non-vide $S = \{e_i : i \in \mathbb{N}\}$ n'a pas d'élément minimal. En effet, pour tout $e_i \in S$, on a $e_i > e_{i + 1}$.
+\end{proof}
 
 \begin{thm}{7.12} Si $\order{E}{<_E} \cong \order{F}{<_F}$, l'isomorphisme est unique.\end{thm}
 
@@ -354,14 +372,6 @@ Associatif, pas commutatif, distributif à gauche.\end{defn}
 \end{enumerate*}
 Ni associative ni commutative.\end{defn}
 
-\begin{defn}{7.30.c}[Exponentiation d'ordinaux]
-\begin{enumerate*}\setcounter{enumi}{1}
-    \item $\alpha^0$ $=$ $1$,
-    \item $\alpha^{\s(\beta)}$ $=$ $\alpha^\beta \cdot \alpha$,
-    \item $\alpha \cdot \beta$ $=$ $\sup(\alpha^\gamma : \gamma < \beta)$.
-\end{enumerate*}
-Ni associative ni commutative.\end{defn}
-
 \section{Löwenheim-Skolem}
 
 \begin{thm}{8.1}[LS$\downarrow$, Löwenheim-Skolem descendant] Soient $\mathscr{L}$ un langage égalitaire et $\mathscr{T}$ une théorie sur ce langage. Si $\mathscr{L}$ est infini, on pose $\kappa = \Card(\mathscr{L})$, sinon $\kappa = \omega = \aleph^0$. S'il existe un modèle de cardinalité $\lambda > \kappa$, alors il existe un modèle de $\mathscr{T}$ de cardinalité $\kappa$.\end{thm}
@@ -383,17 +393,39 @@ Par LS$\downarrow$, $\Th(\mathscr{M})$ et $\Th(\mathscr{N})$ admettent des modè
 \begin{thm}{E.12.1.3}[Axiomatisation des ordres denses] Voici une axiomatisation des ordres denses sans premier ni dernier élément dans le langage du premier ordre égalitaire contenant le symbole de relation $R$:
 \begin{enumerate*}
     \item antiréflexif: $\forall x \; \lnot R(x,x)$,
-    \item transitif: $\forall x \forall y \forall z \; ((R(x,y) \land$ $R(y,z)) \implies R(x,z)))$,
+    \item transitif: $\forall x \forall y \forall z \; ((R(x,y) \land R(y,z)) \implies R(x,z)))$,
     \item un élément entre chaque couple d'éléments distincts: $\forall x \forall y \; (\lnot x = y \implies \exists z \; ((R(x,z) \land$ $ R(z,y)) \lor $ $R(y,z) \land$ $ R(z, x))$,
-    \item pas de plus petit ou plus grand élément: $(\forall x \exists y \; R(y, x) \land$ $\forall x \exists y \; R(x, y))$,
+    \item pas de plus petit ou plus grand élément: $(\forall x \exists y \; R(y, x) \land \forall x \exists y \; R(x, y))$,
     \item au moins deux éléments: $\exists x \exists y \; \lnot x = y$,
     \item relation totale: $\forall x \forall y \; (\lnot x = y \implies (R(x,y) \lor R(y,x))$.
 \end{enumerate*}
 Une structure qui satisfait ces formules est nécessairement infinie.
 \end{thm}
 
-\lipsum
-\lipsum
+\begin{proof}Soit $\order{M}{<}$ une telle structure et soit $a_0 \in M$. Par 4., il existe $a_1 \in M$ tel que $a_0 < a_1$. Par 1., $a_0 \ne a_1$. Par induction, on montre que pour tout $n \in \mathbb{N}$, il existe $a_0, \dots, a_n$ tels que $a_k < a_{k+1}$ pour tout $0 \leq k < n$. Ces éléments sont nécessairement distincts par 1. et donc on conclut que $\mathbb{N}$ s'injecte dans $M$. Ainsi $M$ est infini.\end{proof}
+
+\stepcounter{section}
+\stepcounter{section}
+
+\section{Modèles de Kripke}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/kripke.pdf}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.32\textwidth]{images/kripke2.pdf}
+\end{figure}
+
+\section{Théorème de complétude}
+
+\begin{thm}{12.1}[Complétude de la logique minimale] Soit $\Gamma$ une théorie et $\phi$ une formule. Alors $\Gamma \models_m \phi \iff \Gamma \vdash_m \phi$.\end{thm}
+
+\begin{defn}{12.4}[Non-contradiction]  Un théorie $\Gamma$ est dite non-contradictoire ssi $\Gamma \not\vdash_c \bot$.\end{defn}
+
+\begin{thm}{12.6}[Complétude bis] Une théorie est non-contradictoire ssi elle est consistante.\end{thm}
 
 \end{multicols}
 \end{document}
